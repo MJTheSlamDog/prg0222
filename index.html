@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRG0222 - Programming Notes & Interactive Assessment</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+            --card-border: #e2e8f0;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark-text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: white;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        nav button.active, nav button:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--light-bg);
+            padding-bottom: 8px;
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background-color: var(--light-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .analogy-box {
+            background-color: #eef9ff;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .options-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .options-list li {
+            margin-bottom: 10px;
+        }
+
+        .options-list label {
+            display: block;
+            padding: 10px 15px;
+            background: var(--light-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .options-list label:hover {
+            background: #e9ecef;
+        }
+
+        .options-list input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        textarea, select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn-submit {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #2980b9;
+        }
+
+        .feedback {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .match-grid {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>PRG0222: Programming Knowledge Guide</h1>
+        <p>Comprehensive Study Notes & Interactive Assessment Modules</p>
+    </header>
+
+    <nav>
+        <button class="tab-btn active" onclick="openTab('notes')">Study Notes</button>
+        <button class="tab-btn" onclick="openTab('sec-a')">Activity 1: Objective Questions</button>
+        <button class="tab-btn" onclick="openTab('sec-b')">Activity 2: Short & Long Questions</button>
+    </nav>
+
+    <!-- SECTION: STUDY NOTES -->
+    <div id="notes" class="tab-content active">
+        
+        <!-- KT0101 & KT0102 -->
+        <div class="card">
+            <h2>1. Programming Languages, Hardware & Platforms</h2>
+            <h3>Major Paradigm Classifications</h3>
+            <ul>
+                <li><strong>Procedural Programming:</strong> Follows a sequential step-by-step series of commands or procedures to reach an output (e.g., <code>C</code>, <code>Pascal</code>, <code>BASIC</code>)[cite: 1].</li>
+                <li><strong>Object-Oriented Programming (OOP):</strong> Structures programs around reusable "objects" encapsulating data attributes and operations/methods (e.g., <code>Java</code>, <code>Python</code>, <code>C++</code>)[cite: 1].</li>
+                <li><strong>Functional Programming:</strong> Evaluates mathematical functions using immutable data and higher-order execution (e.g., <code>Scala</code>, <code>Haskell</code>, <code>Erlang</code>)[cite: 1].</li>
+                <li><strong>Scripting Languages:</strong> Automates repetitive operations, handles dynamic web content, or connects server processes (e.g., <code>Bash</code>, <code>PHP</code>, <code>Node.js</code>)[cite: 1].</li>
+                <li><strong>Logic Programming:</strong> Solves queries using declared facts and conditional logic rules (e.g., <code>Prolog</code>, <code>Datalog</code>)[cite: 1].</li>
+            </ul>
+
+            <h3>Hardware vs. Software Dynamics</h3>
+            <p>Computing platforms rely on hardware and software acting complementarily[cite: 1]. Hardware provides tangible infrastructure, while software supplies instructions[cite: 1]. Key internal hardware components include:</p>
+            <ul>
+                <li><strong>CPU (Central Processing Unit):</strong> Known as the core engine or "brain" that processes and executes binary instructions[cite: 1].</li>
+                <li><strong>Motherboard:</strong> The primary circuit board acting as a central hub interconnecting processing unit, memory, and expansion slots[cite: 1].</li>
+                <li><strong>RAM vs. Storage:</strong> RAM delivers temporary, volatile workspace cleared upon powering down; hard drives and SSDs supply non-volatile, persistent storage for programs and system data[cite: 1].</li>
+                <li><strong>Heat Sink:</strong> A passive thermal element installed directly over high-heat hardware (like the CPU) to regulate working temperatures[cite: 1].</li>
+            </ul>
+        </div>
+
+        <!-- KT0103 & KT0104 -->
+        <div class="card">
+            <h2>2. Software Development Tools & Libraries</h2>
+            <h3>Developer Toolsuite Spectrum</h3>
+            <ul>
+                <li><strong>Collaborator:</strong> Peer code and document review suite providing electronic signatures for regulatory standards like ISO26262[cite: 1].</li>
+                <li><strong>RAD Studio:</strong> High-productivity IDE compiling native cross-platform applications (Windows, macOS, iOS, Android, Linux) from a single codebase via direct FireDAC database engine connections[cite: 1].</li>
+                <li><strong>FinanceLayer:</strong> Real-time API service delivering automated financial news feeds and live stock metrics formatted in JSON payloads[cite: 1].</li>
+                <li><strong>Studio 3T:</strong> Advanced MongoDB management client featuring Visual Query Builder, data masking obfuscation, and SQL-to-NoSQL migration workflows[cite: 1].</li>
+                <li><strong>Linx:</strong> Low-code server/IDE platform utilizing visual drag-and-drop workflow designers to build automated backend processes and expose web services[cite: 1].</li>
+                <li><strong>SQL Sentry:</strong> Enterprise database performance monitoring system providing root-cause analysis, storage capacity forecasting, and scheduled job oversight via an Outlook-style calendar[cite: 1].</li>
+            </ul>
+
+            <h3>Libraries vs. Frameworks</h3>
+            <div class="analogy-box">
+                <strong>Structural Comparison:</strong>
+                <ul>
+                    <li><strong>Library:</strong> A collection of pre-written functions or routines designed to solve specific problems[cite: 1]. The developer remains in full control of program architecture and invokes library components as needed (like buying loose furniture to customize a room)[cite: 1].</li>
+                    <li><strong>Framework:</strong> A complete architectural blueprint and mandatory structure that controls execution flow[cite: 1]. Developers must fit custom code into the framework's preset patterns (like decorating a pre-built model home)[cite: 1].</li>
+                </ul>
+            </div>
+
+            <h3>Key Data Science Libraries</h3>
+            <ul>
+                <li><strong>NumPy:</strong> Python library specializing in multidimensional array manipulation for optimized scientific processing[cite: 1].</li>
+                <li><strong>Matplotlib:</strong> Python plotting tool configured to render visual graphs and data timelines[cite: 1].</li>
+                <li><strong>TensorFlow:</strong> Google-developed library designed to build, optimize, and train deep neural networks[cite: 1].</li>
+                <li><strong>Apache Spark:</strong> Distributed analytics engine executing fast queries over massive datasets across Scala, Python, Java, and SQL[cite: 1].</li>
+            </ul>
+        </div>
+
+        <!-- KT0201 - KT0203 -->
+        <div class="card">
+            <h2>3. Data Structures, Algorithms & Syntax</h2>
+            <h3>Data Structure Classifications</h3>
+            <ul>
+                <li><strong>Linear Structures:</strong> Elements are ordered sequentially[cite: 1].
+                    <ul>
+                        <li><em>Arrays:</em> Fixed, continuous memory blocks storing identical data types[cite: 1].</li>
+                        <li><em>Stacks:</em> Operates on a Last-In, First-Out (LIFO) protocol where elements enter and exit from a single top position[cite: 1].</li>
+                        <li><em>Queues:</em> Operates on a First-In, First-Out (FIFO) protocol where items join at the rear and exit from the front[cite: 1].</li>
+                        <li><em>Linked Lists:</em> Dynamic elements (nodes) connected via pointer references to memory addresses[cite: 1].</li>
+                    </ul>
+                </li>
+                <li><strong>Non-Linear Structures:</strong> Hierarchical or interconnected element organization[cite: 1].
+                    <ul>
+                        <li><em>Trees:</em> Collections of connected nodes with a single root and unique paths between vertices[cite: 1].</li>
+                        <li><em>Graphs:</em> Complex networks formed by vertices connected through directed or undirected edges[cite: 1].</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Algorithmic Classifications</h3>
+            <p>An algorithm is a finite sequence of precise instructions executing inputs to produce deterministic outputs[cite: 1]. Key types include:</p>
+            <ul>
+                <li><strong>Divide & Conquer:</strong> Splits a problem into smaller sub-problems, solves each, and recombines the results[cite: 1].</li>
+                <li><strong>Brute Force:</strong> Systematically tests every possible combination until finding a match[cite: 1].</li>
+                <li><strong>Greedy:</strong> Selects the locally optimal choice at each sequential step aiming for a global optimum[cite: 1].</li>
+                <li><strong>Dynamic Programming:</strong> Breaks complex tasks into overlapping sub-problems, solving each once and caching results[cite: 1].</li>
+            </ul>
+        </div>
+
+        <!-- KT0301 & KT0401 -->
+        <div class="card">
+            <h2>4. Logical Flow & Error Handling</h2>
+            <h3>Boolean Logical Operators</h3>
+            <p>Programs direct flow using Boolean expressions evaluated via logical operators[cite: 1]:</p>
+            <ul>
+                <li><code>AND</code> (<code>&&</code> / <code>and</code>): Returns true only if <em>both</em> operands evaluate to true[cite: 1].</li>
+                <li><code>OR</code> (<code>||</code> / <code>or</code>): Returns true if <em>at least one</em> operand evaluates to true[cite: 1].</li>
+                <li><code>NOT</code> (<code>!</code> / <code>not</code>): Inverts the Boolean truth value of an expression[cite: 1].</li>
+            </ul>
+
+            <h3>Categorization of Software Errors</h3>
+            <ul>
+                <li><strong>Syntax Errors:</strong> Violations of language structural grammar rules caught before runtime or execution (e.g., missing bracket/semicolon)[cite: 1].</li>
+                <li><strong>Logic Errors:</strong> Flaws in implementation logic that run without throwing errors but produce incorrect output[cite: 1].</li>
+                <li><strong>Compilation Errors:</strong> Occur when the compiler fails to transform high-level code into low-level machine instructions[cite: 1].</li>
+                <li><strong>Runtime Errors:</strong> Faults encountered during active program execution (e.g., trying to read an unassigned null variable)[cite: 1].</li>
+                <li><strong>Arithmetic Errors:</strong> Invalid numerical calculations occurring during evaluation (e.g., division by zero)[cite: 1].</li>
+                <li><strong>Resource Errors:</strong> Occur when software exceeds system resource allocations, such as infinite loops exhausting memory[cite: 1].</li>
+            </ul>
+
+            <h3>Parity Bits & Error Detection</h3>
+            <p>Data transmission uses additional parity bits appended to binary payloads to detect data corruption[cite: 1]:</p>
+            <ul>
+                <li><strong>Even Parity:</strong> The parity bit is set to 0 or 1 so the total count of '1' bits across the byte is an <em>even number</em>[cite: 1].</li>
+                <li><strong>Odd Parity:</strong> The parity bit is configured so the total count of '1' bits across the byte remains an <em>odd number</em>[cite: 1].</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SECTION: ACTIVITY 1 (OBJECTIVE QUESTIONS) -->
+    <div id="sec-a" class="tab-content">
+        <div class="card">
+            <h2>Activity 1: Objective Assessment Module</h2>
+            <p>10 Interactive Multiple Choice, Matching, and Short-Answer Questions modeled after official test standards.</p>
+        </div>
+
+        <form id="quiz-form">
+            <!-- Q1 -->
+            <div class="question-card">
+                <div class="question-title">1.1 Which hardware component is a passive thermal piece directly attached over the CPU to regulate operational heat?[cite: 1]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q1" value="A"> A) Motherboard</label></li>
+                    <li><label><input type="radio" name="q1" value="B"> B) Solid-State Drive</label></li>
+                    <li><label><input type="radio" name="q1" value="C"> C) Heat Sink</label></li>
+                    <li><label><input type="radio" name="q1" value="D"> D) Network Interface Card</label></li>
+                </ul>
+                <div id="feedback-q1" class="feedback"></div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="question-card">
+                <div class="question-title">1.2 Which programming language paradigm is explicitly classified as a functional programming language?[cite: 1]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q2" value="A"> A) Haskell</label></li>
+                    <li><label><input type="radio" name="q2" value="B"> B) Pascal</label></li>
+                    <li><label><input type="radio" name="q2" value="C"> C) Prolog</label></li>
+                    <li><label><input type="radio" name="q2" value="D"> D) BASIC</label></li>
+                </ul>
+                <div id="feedback-q2" class="feedback"></div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="question-card">
+                <div class="question-title">1.3 Which backend developer tool utilizes a drag-and-drop interface to build automated business processes and deploy web services?[cite: 1]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q3" value="A"> A) Collaborator</label></li>
+                    <li><label><input type="radio" name="q3" value="B"> B) Linx</label></li>
+                    <li><label><input type="radio" name="q3" value="C"> C) Studio 3T</label></li>
+                    <li><label><input type="radio" name="q3" value="D"> D) SQL Sentry</label></li>
+                </ul>
+                <div id="feedback-q3" class="feedback"></div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="question-card">
+                <div class="question-title">1.4 Which Python library was specifically developed by Google for training machine learning models and neural networks?[cite: 1]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q4" value="A"> A) NumPy</label></li>
+                    <li><label><input type="radio" name="q4" value="B"> B) Matplotlib</label></li>
+                    <li><label><input type="radio" name="q4" value="C"> C) TensorFlow</label></li>
+                    <li><label><input type="radio" name="q4" value="D"> D) Apache Spark</label></li>
+                </ul>
+                <div id="feedback-q4" class="feedback"></div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="question-card">
+                <div class="question-title">1.5 Match the Tool/Concept in Column A to its correct functional description in Column B:</div>
+                <div class="match-grid">
+                    <div>
+                        <p><strong>Column A Item:</strong></p>
+                        <p>1. Studio 3T[cite: 1]</p>
+                        <p>2. LIFO Principle[cite: 1]</p>
+                        <p>3. FinanceLayer[cite: 1]</p>
+                    </div>
+                    <div>
+                        <p><strong>Column B Select:</strong></p>
+                        <select id="q5_1">
+                            <option value="">-- Choose matching description --</option>
+                            <option value="A">A) API providing JSON payloads for live financial news and stock metrics</option>
+                            <option value="B">B) MongoDB client featuring data masking and visual query builders</option>
+                            <option value="C">C) Operational rule where the last element inserted is the first removed (Stack)</option>
+                        </select>
+                        <select id="q5_2">
+                            <option value="">-- Choose matching description --</option>
+                            <option value="A">A) API providing JSON payloads for live financial news and stock metrics</option>
+                            <option value="B">B) MongoDB client featuring data masking and visual query builders</option>
+                            <option value="C">C) Operational rule where the last element inserted is the first removed (Stack)</option>
+                        </select>
+                        <select id="q5_3">
+                            <option value="">-- Choose matching description --</option>
+                            <option value="A">A) API providing JSON payloads for live financial news and stock metrics</option>
+                            <option value="B">B) MongoDB client featuring data masking and visual query builders</option>
+                            <option value="C">C) Operational rule where the last element inserted is the first removed (Stack)</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="feedback-q5" class="feedback"></div>
+            </div>
+
+            <!-- Q6 - True/False -->
+            <div class="question-card">
+                <div class="question-title">1.6 True or False: In Even Parity checking, the parity bit is adjusted so that the total count of '1' bits in the transmitted byte is always an even integer.[cite: 1]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q6" value="True"> True</label></li>
+                    <li><label><input type="radio" name="q6" value="False"> False</label></li>
+                </ul>
+                <div id="feedback-q6" class="feedback"></div>
+            </div>
+
+            <!-- Q7 - True/False -->
+            <div class="question-card">
+                <div class="question-title">1.7 True or False: A programming framework allows developers complete freedom over application execution flow without enforcing structural blueprints.[cite: 1]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q7" value="True"> True</label></li>
+                    <li><label><input type="radio" name="q7" value="False"> False</label></li>
+                </ul>
+                <div id="feedback-q7" class="feedback"></div>
+            </div>
+
+            <!-- Q8 - True/False -->
+            <div class="question-card">
+                <div class="question-title">1.8 True or False: A queue data structure organizes elements following the Last-In, First-Out (LIFO) computational rule.[cite: 1]</div>
+                <ul class="options-list">
+                    <li><label><input type="radio" name="q8" value="True"> True</label></li>
+                    <li><label><input type="radio" name="q8" value="False"> False</label></li>
+                </ul>
+                <div id="feedback-q8" class="feedback"></div>
+            </div>
+
+            <!-- Q9 - Short Definition -->
+            <div class="question-card">
+                <div class="question-title">1.9 Define "Data Masking" as applied within modern database management tools.[cite: 1]</div>
+                <input type="text" id="q9_ans" placeholder="Type key concept/definition here...">
+                <div id="feedback-q9" class="feedback"></div>
+            </div>
+
+            <!-- Q10 - Short Definition -->
+            <div class="question-card">
+                <div class="question-title">1.10 Briefly define what constitutes an "Arithmetic Error" in application development.[cite: 1]</div>
+                <input type="text" id="q10_ans" placeholder="Type key concept/definition here...">
+                <div id="feedback-q10" class="feedback"></div>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="gradeActivity1()">Submit & Check Answers</button>
+        </form>
+    </div>
+
+    <!-- SECTION: ACTIVITY 2 (SHORT & LONG QUESTIONS) -->
+    <div id="sec-b" class="tab-content">
+        <div class="card">
+            <h2>Activity 2: Short & Long Assessment Questions</h2>
+            <p>10 Scenario & Analysis Questions modeled after Section B written exams. Click to reveal comprehensive sample answers.</p>
+        </div>
+
+        <!-- Q2.1 -->
+        <div class="question-card">
+            <div class="question-title">2.1 Differentiate clearly between Procedural Programming and Object-Oriented Programming (OOP) paradigms. Provide two language examples for each.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-1')">View Model Answer</button>
+            <div id="ans-2-1" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • <strong>Procedural Programming:</strong> Organizes code into sequential steps or routines that execute commands sequentially[cite: 1]. Examples: <code>C</code>, <code>Pascal</code>, <code>BASIC</code>[cite: 1].<br>
+                • <strong>Object-Oriented Programming (OOP):</strong> Centers application structure around modular "objects" bundling state attributes and callable methods[cite: 1]. Examples: <code>Java</code>, <code>Python</code>, <code>C++</code>[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.2 -->
+        <div class="question-card">
+            <div class="question-title">2.2 Distinguish between a Programming Library and a Software Framework using structural features or architectural analogies.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-2')">View Model Answer</button>
+            <div id="ans-2-2" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • <strong>Control Flow:</strong> In a <em>library</em>, the developer maintains control over program flow and chooses specific routines to call[cite: 1]. In a <em>framework</em>, the framework controls program execution flow and dictates where developer code plugs in[cite: 1].<br>
+                • <strong>Analogy:</strong> A library is like flat-pack furniture chosen to decorate a custom-designed house[cite: 1]. A framework is like a pre-constructed model house that defines overall layout and structural parameters[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.3 -->
+        <div class="question-card">
+            <div class="question-title">2.3 Highlight two key features of RAD Studio that accelerate multi-platform application deployment.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-3')">View Model Answer</button>
+            <div id="ans-2-3" class="feedback">
+                <strong>Model Answer:</strong><br>
+                1. <strong>Single Codebase Cross-Compilation:</strong> Compiles native executables across Windows, macOS, iOS, Android, and Linux platforms from one source code[cite: 1].<br>
+                2. <strong>Direct Database Connectivity:</strong> Integrates FireDAC engine modules for fast native access to over 20 relational database engines[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.4 -->
+        <div class="question-card">
+            <div class="question-title">2.4 Name three prominent data science/analytics libraries and describe the primary functional domain of each.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-4')">View Model Answer</button>
+            <div id="ans-2-4" class="feedback">
+                <strong>Model Answer:</strong><br>
+                1. <strong>NumPy:</strong> Fast multi-dimensional array processing and mathematical manipulation[cite: 1].<br>
+                2. <strong>Matplotlib:</strong> Generating visual graphs, plots, and graphical rendering of timeline data[cite: 1].<br>
+                3. <strong>Apache Spark:</strong> Distributed analytics engine executing fast queries over massive big data environments[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.5 -->
+        <div class="question-card">
+            <div class="question-title">2.5 Compare Stack and Queue data structures in terms of operational principles and element insertion/removal ends.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-5')">View Model Answer</button>
+            <div id="ans-2-5" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • <strong>Stack:</strong> Follows the Last-In, First-Out (LIFO) rule[cite: 1]. Both addition (push) and removal (pop) operations occur at a single end called the "top"[cite: 1].<br>
+                • <strong>Queue:</strong> Follows the First-In, First-Out (FIFO) rule[cite: 1]. Insertions (enqueue) take place at the rear, while removals (dequeue) occur at the front[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.6 -->
+        <div class="question-card">
+            <div class="question-title">2.6 Select and outline the operational purposes of Collaborator, SQL Sentry, and Linx in software development pipelines.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-6')">View Model Answer</button>
+            <div id="ans-2-6" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • <strong>Collaborator:</strong> Peer code/document review tool supporting compliance audits via electronic signatures[cite: 1].<br>
+                • <strong>SQL Sentry:</strong> Database performance monitoring tool identifying resource bottlenecks and displaying scheduled jobs via an Outlook-style interface[cite: 1].<br>
+                • <strong>Linx:</strong> Low-code IDE platform using drag-and-drop elements to automate backend logic and expose REST services[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.7 -->
+        <div class="question-card">
+            <div class="question-title">2.7 Compare NumPy, Matplotlib, and TensorFlow regarding primary analytical focus and operational purpose.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-7')">View Model Answer</button>
+            <div id="ans-2-7" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • <strong>NumPy:</strong> Focuses on high-performance array construction and numerical operations[cite: 1].<br>
+                • <strong>Matplotlib:</strong> Focuses on data presentation through graphical charts and visual timelines[cite: 1].<br>
+                • <strong>TensorFlow:</strong> Focuses on artificial intelligence to build, train, and deploy neural network models[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.8 -->
+        <div class="question-card">
+            <div class="question-title">2.8 Explain how SQL Sentry assists database administrators with resource contention and job management.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-8')">View Model Answer</button>
+            <div id="ans-2-8" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • <strong>Scheduled Job Tracking:</strong> Displays job schedules and resource contention in an intuitive Outlook-style calendar[cite: 1].<br>
+                • <strong>Root Cause Analysis:</strong> Pinpoints hardware/OS bottlenecks and query performance impacts using predictive capacity forecasting[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.9 -->
+        <div class="question-card">
+            <div class="question-title">2.9 Analyze the difference between Syntax Errors, Logic Errors, and Runtime Errors. State when each is detected.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-9')">View Model Answer</button>
+            <div id="ans-2-9" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • <strong>Syntax Errors:</strong> Grammar violations in source code detected prior to execution during parsing/compilation[cite: 1].<br>
+                • <strong>Logic Errors:</strong> Design flaws producing incorrect outcomes while running without throwing system errors[cite: 1].<br>
+                • <strong>Runtime Errors:</strong> Unexpected operational exceptions occurring while an end-user executes the program (e.g., divide by zero)[cite: 1].
+            </div>
+        </div>
+
+        <!-- Q2.10 -->
+        <div class="question-card">
+            <div class="question-title">2.10 Describe how Parity Bits are utilized in data communications to detect bit corruption during transmission.[cite: 1]</div>
+            <textarea placeholder="Type your response here..."></textarea>
+            <button class="btn-submit" onclick="toggleAnswer('ans-2-10')">View Model Answer</button>
+            <div id="ans-2-10" class="feedback">
+                <strong>Model Answer:</strong><br>
+                • An extra bit (parity bit) is appended to a data byte so that the total count of 1-bits is fixed to an Even or Odd count[cite: 1].<br>
+                • On receipt, the system counts the 1-bits[cite: 1]. If an Even parity stream arrives with an odd count of 1s, corruption is flagged and retransmission requested[cite: 1].
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTab(tabId) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+        
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function toggleAnswer(id) {
+        const target = document.getElementById(id);
+        if (target.style.display === 'block') {
+            target.style.display = 'none';
+        } else {
+            target.style.display = 'block';
+            target.classList.add('correct');
+        }
+    }
+
+    function gradeActivity1() {
+        // Q1
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        const fb1 = document.getElementById('feedback-q1');
+        if (q1 && q1.value === 'C') {
+            fb1.className = 'feedback correct';
+            fb1.innerText = 'Correct! Heat sink is a passive hardware piece regulating CPU temperature.';
+        } else {
+            fb1.className = 'feedback incorrect';
+            fb1.innerText = 'Incorrect. Correct answer is C) Heat Sink.';
+        }
+
+        // Q2
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        const fb2 = document.getElementById('feedback-q2');
+        if (q2 && q2.value === 'A') {
+            fb2.className = 'feedback correct';
+            fb2.innerText = 'Correct! Haskell is a pure functional programming language.';
+        } else {
+            fb2.className = 'feedback incorrect';
+            fb2.innerText = 'Incorrect. Correct answer is A) Haskell.';
+        }
+
+        // Q3
+        const q3 = document.querySelector('input[name="q3"]:checked');
+        const fb3 = document.getElementById('feedback-q3');
+        if (q3 && q3.value === 'B') {
+            fb3.className = 'feedback correct';
+            fb3.innerText = 'Correct! Linx utilizes a low-code drag-and-drop interface.';
+        } else {
+            fb3.className = 'feedback incorrect';
+            fb3.innerText = 'Incorrect. Correct answer is B) Linx.';
+        }
+
+        // Q4
+        const q4 = document.querySelector('input[name="q4"]:checked');
+        const fb4 = document.getElementById('feedback-q4');
+        if (q4 && q4.value === 'C') {
+            fb4.className = 'feedback correct';
+            fb4.innerText = 'Correct! TensorFlow was developed by Google.';
+        } else {
+            fb4.className = 'feedback incorrect';
+            fb4.innerText = 'Incorrect. Correct answer is C) TensorFlow.';
+        }
+
+        // Q5
+        const m1 = document.getElementById('q5_1').value;
+        const m2 = document.getElementById('q5_2').value;
+        const m3 = document.getElementById('q5_3').value;
+        const fb5 = document.getElementById('feedback-q5');
+        if (m1 === 'B' && m2 === 'C' && m3 === 'A') {
+            fb5.className = 'feedback correct';
+            fb5.innerText = 'Correct! All items matched accurately.';
+        } else {
+            fb5.className = 'feedback incorrect';
+            fb5.innerText = 'Incorrect. Correct pairing: 1 -> B, 2 -> C, 3 -> A.';
+        }
+
+        // Q6
+        const q6 = document.querySelector('input[name="q6"]:checked');
+        const fb6 = document.getElementById('feedback-q6');
+        if (q6 && q6.value === 'True') {
+            fb6.className = 'feedback correct';
+            fb6.innerText = 'Correct! Even Parity ensures an even number of 1 bits.';
+        } else {
+            fb6.className = 'feedback incorrect';
+            fb6.innerText = 'Incorrect. Statement is True.';
+        }
+
+        // Q7
+        const q7 = document.querySelector('input[name="q7"]:checked');
+        const fb7 = document.getElementById('feedback-q7');
+        if (q7 && q7.value === 'False') {
+            fb7.className = 'feedback correct';
+            fb7.innerText = 'Correct! Frameworks dictate overall application architecture.';
+        } else {
+            fb7.className = 'feedback incorrect';
+            fb7.innerText = 'Incorrect. Statement is False.';
+        }
+
+        // Q8
+        const q8 = document.querySelector('input[name="q8"]:checked');
+        const fb8 = document.getElementById('feedback-q8');
+        if (q8 && q8.value === 'False') {
+            fb8.className = 'feedback correct';
+            fb8.innerText = 'Correct! Queues operate under FIFO rules, not LIFO.';
+        } else {
+            fb8.className = 'feedback incorrect';
+            fb8.innerText = 'Incorrect. Statement is False.';
+        }
+
+        // Q9
+        const q9 = document.getElementById('q9_ans').value.toLowerCase();
+        const fb9 = document.getElementById('feedback-q9');
+        if (q9.includes('obfuscat') || q9.includes('secur') || q9.includes('sensitiv') || q9.includes('hide')) {
+            fb9.className = 'feedback correct';
+            fb9.innerText = 'Correct! Data masking obfuscates sensitive fields for security/compliance.';
+        } else {
+            fb9.className = 'feedback incorrect';
+            fb9.innerText = 'Key phrase missing. Data masking obfuscates sensitive fields to ensure compliance/security.';
+        }
+
+        // Q10
+        const q10 = document.getElementById('q10_ans').value.toLowerCase();
+        const fb10 = document.getElementById('feedback-q10');
+        if (q10.includes('math') || q10.includes('zero') || q10.includes('calculat') || q10.includes('divis')) {
+            fb10.className = 'feedback correct';
+            fb10.innerText = 'Correct! Arithmetic errors involve numerical calculation mistakes like division by zero.';
+        } else {
+            fb10.className = 'feedback incorrect';
+            fb10.innerText = 'Key phrase missing. Arithmetic errors stem from mathematical calculation faults (e.g., dividing by zero).';
+        }
+    }
+</script>
+
+</body>
+</html>
